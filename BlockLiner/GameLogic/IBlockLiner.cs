@@ -1,4 +1,5 @@
 ﻿using BlockLiner.GameLogic.Blocks;
+using BlockLiner.GameLogic.States;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,12 @@ namespace BlockLiner.GameLogic
 {
     interface IBlockLiner
     {
-        Block[,] GameArea
-        {
-            get;
-        }
+        Block[,] GameArea { get; }
+
+        BlockLinerState.Type CurrentState { get; }
 
         void Update(GameTime delta);
+
+        BlockLinerState GetStateInstance(BlockLinerState.Type stateType);
     }
 }
