@@ -21,7 +21,6 @@ namespace BlockLiner
         private IRenderingSystem _rendering;
 
         private GraphicsDeviceManager _graphics;
-        SpriteBatch _spriteBatch;
 
         public BlockLiner()
         {
@@ -40,7 +39,7 @@ namespace BlockLiner
             _gamelogic = new BlockLinerLogic(BoardWidth, BoardHeight);
 
             // graphics initialization
-            _renderer = new MonoRenderer(GraphicsDevice);
+            _renderer = new MonoRenderer(GraphicsDevice, BoardWidth, BoardHeight);
             _rendering = new RenderingSystem(_renderer, _gamelogic);
 
             base.Initialize();

@@ -50,6 +50,12 @@
     <Compile Include="GameLogic\Blocks\TetraBlockT.cs" />
     <Compile Include="GameLogic\Blocks\TetraBlockZ.cs" />
     <Compile Include="GameLogic\IBlockLiner.cs" />
+    <Compile Include="GameLogic\States\BlockLinerState.cs" />
+    <Compile Include="GameLogic\States\CheckingState.cs" />
+    <Compile Include="GameLogic\States\FallingState.cs" />
+    <Compile Include="GameLogic\States\GameOverState.cs" />
+    <Compile Include="GameLogic\States\InitState.cs" />
+    <Compile Include="GameLogic\States\NewBlockState.cs" />
     <Compile Include="Graphics\IBlockLinerRenderer.cs" />
     <Compile Include="Graphics\IRenderingSystem.cs" />
     <Compile Include="Graphics\Mono\MonoRenderer.cs" />

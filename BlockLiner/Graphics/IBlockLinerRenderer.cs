@@ -11,6 +11,7 @@ namespace BlockLiner.Graphics
     {
         void Begin();
         void DrawBlock(Block b);
+        void DrawBorder();
         void End();
     }
 }

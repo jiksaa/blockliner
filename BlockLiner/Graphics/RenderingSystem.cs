@@ -1,4 +1,5 @@
 ﻿using BlockLiner.GameLogic;
+using BlockLiner.GameLogic.Blocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,27 @@ namespace BlockLiner.Graphics
 
         void IRenderingSystem.Render()
         {
-            throw new NotImplementedException();
+            // extracting working data : gamearea and gamearea size
+            Block[,] gameArea = _gamestate.GameArea;
+            uint xSize = (uint)gameArea.GetLength(0);
+            uint ySize = (uint)gameArea.GetLength(1);
+
+            _renderer.Begin();
+
+            // draw gameboarder
+            _renderer.DrawBorder();
+
+            // draw blocks
+            foreach (Block b in gameArea)
+            {
+                // avoid drawing null Block
+                if(b != null)
+                {
+                    _renderer.DrawBlock(b);
+                }
+            }
+
+            _renderer.End();
         }
     }
 }
