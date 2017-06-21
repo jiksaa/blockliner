@@ -7,9 +7,9 @@ namespace BlockLiner.Graphics.Mono
 {
     class MonoRenderer : IBlockLinerRenderer
     {
-        private const int _BLOCKSIZE = 16;
+        private const int _BLOCKSIZE = 26;
 
-        private uint _witdh;
+        private uint _width;
         private uint _height;
         private GraphicsDevice _graphicDevice;
         private SpriteBatch _spritebatch;
@@ -22,18 +22,18 @@ namespace BlockLiner.Graphics.Mono
 
         public MonoRenderer(GraphicsDevice graphics, uint width, uint height)
         {
-            _witdh = width;
+            _width = width;
             _height = height;
             _graphicDevice = graphics;
             _spritebatch = new SpriteBatch(_graphicDevice);
-            
+
             // instantiate Vector2 arrays
 
             // borderPosition is 2 vertical line of _height blocks in addition
             // to the horizontal border of _width blocks
-            _borderpPositionVectors = new Vector2[_height * 2 + _witdh];
+            _borderpPositionVectors = new Vector2[(_height + 1) * 2 + _width];
             // replicate the size of the gameArea
-            _gameAreaPositonVectors = new Vector2[_witdh, _height];
+            _gameAreaPositonVectors = new Vector2[_width, _height];
 
             InitializeTextures();
 
@@ -79,16 +79,16 @@ namespace BlockLiner.Graphics.Mono
                 arrayIndex++;
 
                 // right vline border
-                currentX += _BLOCKSIZE + ((int)_witdh + 1) * _BLOCKSIZE;
+                currentX += _BLOCKSIZE + ((int)_width) * _BLOCKSIZE;
                 _borderpPositionVectors[arrayIndex] = new Vector2(currentX, currentY);
                 arrayIndex++;
             }
 
             //hline vectors construction
-            int hlineY = yOffset + (int)_height * _BLOCKSIZE;
-            for (int i = 0; i < _witdh; i++)
+            int hlineY = yOffset + ((int)_height) * _BLOCKSIZE;
+            for (int i = 0; i < _width + 2; i++)
             {
-                int hlineX = xOffset + (i + 1) * _BLOCKSIZE;
+                int hlineX = xOffset + i * _BLOCKSIZE;
                 _borderpPositionVectors[arrayIndex] = new Vector2(hlineX, hlineY);
                 arrayIndex++;
             }
@@ -100,7 +100,7 @@ namespace BlockLiner.Graphics.Mono
             int xOffset = _BLOCKSIZE * 2;
             int yOffset = _BLOCKSIZE;
 
-            for (int x = 0; x < _witdh; x++)
+            for (int x = 0; x < _width; x++)
             {
                 int currentX = xOffset + x * _BLOCKSIZE;
                 for (int y = 0; y < _height; y++)
@@ -118,12 +118,14 @@ namespace BlockLiner.Graphics.Mono
 
         public void DrawBlock(Block b)
         {
+            // get vector from gameAreaVector matric
             Vector2 v = _gameAreaPositonVectors[b.X, b.Y];
-            _spritebatch.Draw(_blockTexture, v, Color.Black);
+            _spritebatch.Draw(_blockTexture, v, Color.CornflowerBlue);
         }
 
         public void DrawBorder()
         {
+            // foreach border vector draw border block
             foreach (Vector2 location in _borderpPositionVectors)
             {
                 _spritebatch.Draw(_borderTexture, location, Color.White);

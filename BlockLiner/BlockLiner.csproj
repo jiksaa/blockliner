@@ -56,6 +56,7 @@
     <Compile Include="GameLogic\States\GameOverState.cs" />
     <Compile Include="GameLogic\States\InitState.cs" />
     <Compile Include="GameLogic\States\NewBlockState.cs" />
+    <Compile Include="GameLogic\TestingBlockLiner.cs" />
     <Compile Include="Graphics\IBlockLinerRenderer.cs" />
     <Compile Include="Graphics\IRenderingSystem.cs" />
     <Compile Include="Graphics\Mono\MonoRenderer.cs" />
