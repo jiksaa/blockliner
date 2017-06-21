@@ -118,12 +118,16 @@ namespace BlockLiner.Graphics.Mono
 
         public void DrawBlock(Block b)
         {
-            throw new NotImplementedException();
+            Vector2 v = _gameAreaPositonVectors[b.X, b.Y];
+            _spritebatch.Draw(_blockTexture, v, Color.Black);
         }
 
         public void DrawBorder()
         {
-            throw new NotImplementedException();
+            foreach (Vector2 location in _borderpPositionVectors)
+            {
+                _spritebatch.Draw(_borderTexture, location, Color.White);
+            }
         }
 
         public void End()
