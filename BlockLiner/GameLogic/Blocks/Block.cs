@@ -8,11 +8,11 @@ namespace BlockLiner.GameLogic.Blocks
 {
     class Block
     {
-        private uint _x;
-        private uint _y;
+        private float _x;
+        private float _y;
         private bool _falling;
 
-        public uint X
+        public float X
         {
             get
             {
@@ -25,7 +25,7 @@ namespace BlockLiner.GameLogic.Blocks
             }
         }
 
-        public uint Y
+        public float Y
         {
             get
             {
@@ -51,7 +51,7 @@ namespace BlockLiner.GameLogic.Blocks
             }
         }
 
-        public Block(uint x, uint y)
+        public Block(float x, float y)
         {
             X = x;
             Y = y;

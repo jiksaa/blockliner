@@ -119,7 +119,7 @@ namespace BlockLiner.Graphics.Mono
         public void DrawBlock(Block b)
         {
             // get vector from gameAreaVector matric
-            Vector2 v = _gameAreaPositonVectors[b.X, b.Y];
+            Vector2 v = _gameAreaPositonVectors[(int)b.X, (int)b.Y];
             _spritebatch.Draw(_blockTexture, v, Color.CornflowerBlue);
         }
 

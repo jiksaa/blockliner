@@ -18,7 +18,7 @@ namespace BlockLiner.GameLogic.States
             if (keyboard.IsKeyDown(Keys.Enter))
             {
                 System.Diagnostics.Debug.WriteLine("Enter key pressed : starting new game");
-                return gamestate.GetStateInstance(Type.Falling);
+                return gamestate.GetStateInstance(Type.NewBlock);
             }
             else
             {

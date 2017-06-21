@@ -21,6 +21,8 @@ namespace BlockLiner.GameLogic
         private List<TetraBlock> _tetraList;
         private BlockLinerState _currentState;
 
+        private int _tetraListIndex;
+
         public BlockLinerLogic(uint width, uint height)
         {
             _gameArea = new Block[width, height];
@@ -28,14 +30,16 @@ namespace BlockLiner.GameLogic
             // instantiate tetrablock pattern
             _tetraList = new List<TetraBlock>()
             {
+                new TetraBlockL(),
                 new TetraBlockI(),
                 new TetraBlockJ(),
-                new TetraBlockL(),
                 new TetraBlockO(),
                 new TetraBlockS(),
                 new TetraBlockT(),
                 new TetraBlockZ()
             };
+
+            _tetraListIndex = 0;
 
             // set initialization state
             _currentState = _initState;
@@ -56,6 +60,23 @@ namespace BlockLiner.GameLogic
             {
                 return _gameArea;
             }
+        }
+
+        public TetraBlock NextTetraBlock
+        {
+            get
+            {
+                return _tetraList[_tetraListIndex];
+            }
+        }
+
+        public TetraBlock PopNextTetraBlock()
+        {
+            TetraBlock next = _tetraList[_tetraListIndex];
+            _tetraListIndex++;
+            _tetraListIndex %= _tetraList.Count;
+            // TODO: shuffle list after one round
+            return next;
         }
 
         public BlockLinerState GetStateInstance(BlockLinerState.Type stateType)

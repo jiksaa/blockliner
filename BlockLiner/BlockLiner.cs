@@ -36,8 +36,8 @@ namespace BlockLiner
         protected override void Initialize()
         {
             // gamelogic initialization
-            //_gamelogic = new BlockLinerLogic(BoardWidth, BoardHeight);
-            _gamelogic = new TestingBlockLiner();
+            _gamelogic = new BlockLinerLogic(BoardWidth, BoardHeight);
+            //_gamelogic = new TestingBlockLiner();
 
             // graphics initialization
             _renderer = new MonoRenderer(GraphicsDevice, BoardWidth, BoardHeight);
@@ -61,7 +61,7 @@ namespace BlockLiner
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            _gamelogic.Update(gameTime);
 
             base.Update(gameTime);
         }

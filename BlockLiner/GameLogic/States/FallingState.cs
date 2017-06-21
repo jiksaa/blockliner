@@ -15,7 +15,8 @@ namespace BlockLiner.GameLogic.States
 
         public override BlockLinerState Update(IBlockLiner gamestate, GameTime delta)
         {
-            throw new NotImplementedException();
+            // falling logic
+            return this;
         }
     }
 }

@@ -44,6 +44,14 @@ namespace BlockLiner.GameLogic
             }
         }
 
+        public TetraBlock NextTetraBlock
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public BlockLinerState GetStateInstance(BlockLinerState.Type stateType)
         {
             return _state;
@@ -52,6 +60,11 @@ namespace BlockLiner.GameLogic
         public void Update(GameTime delta)
         {
             // do nothing
+        }
+
+        public TetraBlock PopNextTetraBlock()
+        {
+            throw new NotImplementedException();
         }
     }
 }

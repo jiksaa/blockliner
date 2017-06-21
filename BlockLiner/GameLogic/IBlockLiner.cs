@@ -12,11 +12,11 @@ namespace BlockLiner.GameLogic
     interface IBlockLiner
     {
         Block[,] GameArea { get; }
-
+        TetraBlock NextTetraBlock { get; }
         BlockLinerState.Type CurrentState { get; }
 
         void Update(GameTime delta);
-
         BlockLinerState GetStateInstance(BlockLinerState.Type stateType);
+        TetraBlock PopNextTetraBlock();
     }
 }
