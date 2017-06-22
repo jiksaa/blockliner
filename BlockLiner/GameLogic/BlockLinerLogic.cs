@@ -13,7 +13,7 @@ namespace BlockLiner.GameLogic
     {
         private static BlockLinerState _initState = new InitState();
         private static BlockLinerState _newBlockState = new NewBlockState();
-        private static BlockLinerState _fallingState = new FallingState();
+        private static BlockLinerState _fallingState = new FallingState(2);
         private static BlockLinerState _checkingState = new CheckingState();
         private static BlockLinerState _gameoverState = new GameOverState();
 
@@ -30,10 +30,10 @@ namespace BlockLiner.GameLogic
             // instantiate tetrablock pattern
             _tetraList = new List<TetraBlock>()
             {
+                new TetraBlockO(),
                 new TetraBlockL(),
                 new TetraBlockI(),
                 new TetraBlockJ(),
-                new TetraBlockO(),
                 new TetraBlockS(),
                 new TetraBlockT(),
                 new TetraBlockZ()

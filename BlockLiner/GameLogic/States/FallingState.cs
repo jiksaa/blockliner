@@ -12,10 +12,12 @@ namespace BlockLiner.GameLogic.States
     {
 
         private double _fallingTime;
+        private double _seconds;
 
-        public FallingState()
+        public FallingState(double seconds)
         {
             _fallingTime = 0;
+            _seconds = seconds;
         }
 
         public override BlockLinerState Update(IBlockLiner gamestate, GameTime delta)
@@ -26,7 +28,7 @@ namespace BlockLiner.GameLogic.States
             //
             // This implementation is not very accurate
             _fallingTime += delta.ElapsedGameTime.TotalSeconds;
-            if(_fallingTime > 1)
+            if(_fallingTime > _seconds)
             {
                 _fallingTime = 0;
                 return FallingProcess(gamestate);

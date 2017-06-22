@@ -20,7 +20,7 @@ namespace BlockLiner.GameLogic
         public TestingBlockLiner()
         {
             _gameArea = new Block[_WIDTH, _HEIGHT];
-            _state = new FallingState();
+            _state = new FallingState(2);
 
             _gameArea[3, 0] = new Block(3, 0);
             _gameArea[4, 0] = new Block(4, 0);
