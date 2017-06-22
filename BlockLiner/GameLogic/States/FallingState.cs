@@ -68,16 +68,6 @@ namespace BlockLiner.GameLogic.States
                 RevertFalling(gamestate.GameArea, fellBlocks);
                 return gamestate.GetStateInstance(Type.Checking);
             }
-
-            for (int y = 0; y < gamestate.GameArea.GetLength(1); y++)
-            {
-                for (int x = 0; x < gamestate.GameArea.GetLength(0); x++)
-                {
-                    System.Diagnostics.Debug.Write(gamestate.GameArea[x,y] + " ");
-                }
-                System.Diagnostics.Debug.WriteLine("");
-            }
-
             return this;
         }
 
