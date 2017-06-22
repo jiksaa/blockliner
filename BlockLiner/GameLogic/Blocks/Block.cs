@@ -45,16 +45,25 @@ namespace BlockLiner.GameLogic.Blocks
                 return _falling;
             }
 
-            private set
+            set
             {
                 _falling = value;
             }
         }
 
-        public Block(float x, float y)
+        public Block(float x, float y, bool falling)
         {
             X = x;
             Y = y;
+            Falling = falling;
         }
+
+        public Block(float x, float y) : this(x,y,false) { }
+
+        public override string ToString()
+        {
+            return "(" + X + "," + Y + ")" + Falling;
+        }
+
     }
 }

@@ -60,6 +60,11 @@ namespace BlockLiner.GameLogic
             {
                 return _gameArea;
             }
+
+            set
+            {
+                _gameArea = value;
+            }
         }
 
         public TetraBlock NextTetraBlock

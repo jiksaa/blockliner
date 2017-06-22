@@ -23,7 +23,7 @@ namespace BlockLiner.GameLogic.States
                 // add new tetra to gameArea
                 AddTetra(next, gameArea);
             }
-            catch (UnplacableBlockException ex)
+            catch (UnplacableBlockException)
             {
                 return gamestate.GetStateInstance(Type.GameOver);
             }
@@ -60,7 +60,7 @@ namespace BlockLiner.GameLogic.States
                     {
                         int xMatrix = xMiddle + xt;
                         int yMatrix = y + yt;
-                        matrix[xMatrix, yMatrix] = (pattern[xt, yt]) ? new Block(xMatrix, yMatrix) : null;
+                        matrix[xMatrix, yMatrix] = (pattern[xt, yt]) ? new Block(xMatrix, yMatrix, true) : null;
                     }
                 }
             }
