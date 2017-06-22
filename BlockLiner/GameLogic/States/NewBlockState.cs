@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using BlockLiner.GameLogic.Blocks;
+using BlockLiner.GameLogic.Exceptions;
 
 namespace BlockLiner.GameLogic.States
 {
@@ -17,13 +18,19 @@ namespace BlockLiner.GameLogic.States
             TetraBlock next = gamestate.PopNextTetraBlock();
             Block[,] gameArea = gamestate.GameArea;
 
-            // add new tetra to gameArea
-            AddTetra(next, gameArea);
-
+            try
+            {
+                // add new tetra to gameArea
+                AddTetra(next, gameArea);
+            }
+            catch (UnplacableBlockException ex)
+            {
+                return gamestate.GetStateInstance(Type.GameOver);
+            }
             return gamestate.GetStateInstance(Type.Falling);
         }
 
-        public static void AddTetra(TetraBlock tetra, Block[,] matrix)
+        private static void AddTetra(TetraBlock tetra, Block[,] matrix)
         {
             int xMiddle = matrix.GetLength(0) / 2;
             int y = 0;
@@ -57,6 +64,7 @@ namespace BlockLiner.GameLogic.States
                     }
                 }
             }
+            else throw new UnplacableBlockException();
         }
 
     }
