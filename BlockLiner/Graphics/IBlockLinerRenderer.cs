@@ -9,6 +9,7 @@ namespace BlockLiner.Graphics
 {
     interface IBlockLinerRenderer
     {
+        void Clear();
         void Begin();
         void DrawBlock(Block b);
         void DrawBorder();

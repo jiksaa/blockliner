@@ -22,6 +22,8 @@ namespace BlockLiner.Graphics
 
         void IRenderingSystem.Render()
         {
+            _renderer.Clear();
+
             // extracting working data : gamearea and gamearea size
             Block[,] gameArea = _gamestate.GameArea;
             uint xSize = (uint)gameArea.GetLength(0);

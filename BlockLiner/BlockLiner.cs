@@ -40,7 +40,7 @@ namespace BlockLiner
             //_gamelogic = new TestingBlockLiner();
 
             // graphics initialization
-            _renderer = new MonoRenderer(GraphicsDevice, BoardWidth, BoardHeight);
+            _renderer = new MonoRenderer(GraphicsDevice, _graphics, BoardWidth, BoardHeight);
             _rendering = new RenderingSystem(_renderer, _gamelogic);
 
             base.Initialize();

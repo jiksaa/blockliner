@@ -11,6 +11,7 @@ namespace BlockLiner.Graphics.Mono
 
         private uint _width;
         private uint _height;
+        private GraphicsDeviceManager _graphicsManager;
         private GraphicsDevice _graphicDevice;
         private SpriteBatch _spritebatch;
 
@@ -20,11 +21,12 @@ namespace BlockLiner.Graphics.Mono
         private Vector2[] _borderpPositionVectors;
         private Vector2[,] _gameAreaPositonVectors;
 
-        public MonoRenderer(GraphicsDevice graphics, uint width, uint height)
+        public MonoRenderer(GraphicsDevice graphics, GraphicsDeviceManager gManager, uint width, uint height)
         {
             _width = width;
             _height = height;
             _graphicDevice = graphics;
+            _graphicsManager = gManager;
             _spritebatch = new SpriteBatch(_graphicDevice);
 
             // instantiate Vector2 arrays
@@ -135,6 +137,11 @@ namespace BlockLiner.Graphics.Mono
         public void End()
         {
             _spritebatch.End();
+        }
+
+        public void Clear()
+        {
+            _graphicDevice.Clear(Color.Black);
         }
     }
 }
