@@ -8,8 +8,10 @@ namespace BlockLiner.GameLogic.Blocks
 {
     class TetraBlockJ : TetraBlock
     {
-        public TetraBlockJ() : base( new bool[2, 3] { 
-                { false, false, false },
-                { true,  true,  true } }) { }
+        public TetraBlockJ() : base( new bool[3, 2] {
+                { true, false },
+                { true, false },
+                { true,  true }
+        }) { }
     }
 }
