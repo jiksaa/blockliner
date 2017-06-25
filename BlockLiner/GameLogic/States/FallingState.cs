@@ -22,11 +22,7 @@ namespace BlockLiner.GameLogic.States
 
         public override BlockLinerState Update(IBlockLiner gamestate, GameTime delta)
         {
-            // TODO: this process should be refactored !!!!!
-            // we need to update X Y according to a speed and launch
-            // falling checking appropriatly
-            //
-            // This implementation is not very accurate
+            // Manage rotation and moving
             _fallingTime += delta.ElapsedGameTime.TotalSeconds;
             if(_fallingTime > _seconds)
             {
@@ -102,6 +98,9 @@ namespace BlockLiner.GameLogic.States
                 gameArea[(int)b.X, (int)b.Y] = null;
                 b.Y -= 1;
                 b.Falling = false;
+            }
+            foreach(Block b in fellBlocks)
+            {
                 gameArea[(int)b.X, (int)b.Y] = b;
             }
         }
