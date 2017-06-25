@@ -13,7 +13,7 @@ namespace BlockLiner.GameLogic
     {
         private static BlockLinerState _initState = new InitState();
         private static BlockLinerState _newBlockState = new NewBlockState();
-        private static BlockLinerState _fallingState = new FallingState(2);
+        private static BlockLinerState _fallingState = new FallingState(0.5);
         private static BlockLinerState _checkingState = new CheckingState();
         private static BlockLinerState _gameoverState = new GameOverState();
 

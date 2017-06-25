@@ -12,11 +12,11 @@ namespace BlockLiner
 
         public static uint ResolutionWidth = 600;
         public static uint ResolutionHeight = 800;
-        //public static uint BoardWidth = 12;
-        //public static uint BoardHeight = 26;
+        public static uint BoardWidth = 12;
+        public static uint BoardHeight = 26;
 
-        public static uint BoardWidth = 5;
-        public static uint BoardHeight = 28;
+        //public static uint BoardWidth = 5;
+        //public static uint BoardHeight = 28;
 
         private IBlockLiner _gamelogic;
 
@@ -39,8 +39,8 @@ namespace BlockLiner
         protected override void Initialize()
         {
             // gamelogic initialization
-            //_gamelogic = new BlockLinerLogic(BoardWidth, BoardHeight);
-            _gamelogic = new TestingBlockLiner((int)BoardWidth, (int)BoardHeight);
+            _gamelogic = new BlockLinerLogic(BoardWidth, BoardHeight);
+            //_gamelogic = new TestingBlockLiner((int)BoardWidth, (int)BoardHeight);
 
             // graphics initialization
             _renderer = new MonoRenderer(GraphicsDevice, _graphics, BoardWidth, BoardHeight);
