@@ -55,6 +55,7 @@ namespace BlockLiner.GameLogic.States
                         }
                         else
                         {
+                            b.Falling = false;
                             revert = true;
                         }
                     }
