@@ -11,21 +11,27 @@ namespace BlockLiner.GameLogic
 {
     class TestingBlockLiner : IBlockLiner
     {
-        private const int _WIDTH = 12;
-        private const int _HEIGHT = 28;
+        private int _WIDTH;
+        private int _HEIGHT;
 
         private Block[,] _gameArea;
         private BlockLinerState _state;
 
-        public TestingBlockLiner()
+        public TestingBlockLiner(int width, int height)
         {
-            _gameArea = new Block[_WIDTH, _HEIGHT];
-            _state = new FallingState(2);
+            _WIDTH = width;
+            _HEIGHT = height;
 
-            _gameArea[3, 0] = new Block(3, 0);
-            _gameArea[4, 0] = new Block(4, 0);
-            _gameArea[4, 1] = new Block(4, 1);
-            _gameArea[5, 1] = new Block(5, 1);
+            _gameArea = new Block[_WIDTH, _HEIGHT];
+            _state = new FallingState(0.5);
+
+
+            _gameArea[3, 0] = new Block(3, 0, true);
+            _gameArea[3, 1] = new Block(3, 1, true);
+            _gameArea[3, 2] = new Block(3, 2, true);
+            _gameArea[2, 0] = new Block(2, 0, true);
+
+            _gameArea[2, 5] = new Block(2, 5);
         }
 
         public BlockLinerState.Type CurrentState
@@ -59,7 +65,7 @@ namespace BlockLiner.GameLogic
 
         public void Update(GameTime delta)
         {
-            // do nothing
+            _state = _state.Update(this,delta);
         }
 
         public TetraBlock PopNextTetraBlock()
