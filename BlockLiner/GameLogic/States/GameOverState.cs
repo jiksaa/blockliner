@@ -9,8 +9,12 @@ namespace BlockLiner.GameLogic.States
 {
     class GameOverState : BlockLinerState
     {
-        public GameOverState()
+        public override Type StateType
         {
+            get
+            {
+                return Type.GameOver;
+            }
         }
 
         public override BlockLinerState Update(IBlockLiner gamestate, GameTime delta)

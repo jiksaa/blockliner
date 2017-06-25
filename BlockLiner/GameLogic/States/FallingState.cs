@@ -14,6 +14,14 @@ namespace BlockLiner.GameLogic.States
         private double _fallingTime;
         private double _seconds;
 
+        public override Type StateType
+        {
+            get
+            {
+                return Type.Falling;
+            }
+        }
+
         public FallingState(double seconds)
         {
             _fallingTime = 0;

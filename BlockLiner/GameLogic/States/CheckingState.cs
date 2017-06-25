@@ -10,8 +10,12 @@ namespace BlockLiner.GameLogic.States
 {
     class CheckingState : BlockLinerState
     {
-        public CheckingState()
+        public override Type StateType
         {
+            get
+            {
+                return Type.Checking;
+            }
         }
 
         public override BlockLinerState Update(IBlockLiner gamestate, GameTime delta)

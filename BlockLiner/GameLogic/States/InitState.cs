@@ -6,9 +6,12 @@ namespace BlockLiner.GameLogic.States
 {
     class InitState : BlockLinerState
     {
-        public InitState()
+        public override Type StateType
         {
-            StateType = Type.Init;
+            get
+            {
+                return Type.Init;
+            }
         }
 
         public override BlockLinerState Update(IBlockLiner gamestate, GameTime delta)

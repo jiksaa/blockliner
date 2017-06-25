@@ -5,18 +5,7 @@ namespace BlockLiner.GameLogic.States
     abstract class BlockLinerState
     {
         private Type stateType;
-        public Type StateType
-        {
-            get
-            {
-                return stateType;
-            }
-
-            protected set
-            {
-                stateType = value;
-            }
-        }
+        public abstract Type StateType { get; }
 
         /// <summary>
         /// Update gamelogic for the given delta time
