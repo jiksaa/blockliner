@@ -13,18 +13,20 @@ namespace BlockLiner.GameLogic
     {
         private static BlockLinerState _initState = new InitState();
         private static BlockLinerState _newBlockState = new NewBlockState();
-        private static BlockLinerState _fallingState = new FallingState(0.5);
+        private static BlockLinerState _fallingState = new FallingState(0.2);
         private static BlockLinerState _checkingState = new CheckingState();
         private static BlockLinerState _gameoverState = new GameOverState();
 
         private Block[,] _gameArea;
         private List<TetraBlock> _tetraList;
         private BlockLinerState _currentState;
+        private Game _gameInstance;
 
         private int _tetraListIndex;
 
-        public BlockLinerLogic(uint width, uint height)
+        public BlockLinerLogic(uint width, uint height, Game gameInstance)
         {
+            _gameInstance = gameInstance;
             _gameArea = new Block[width, height];
 
             // instantiate tetrablock pattern
@@ -101,6 +103,25 @@ namespace BlockLiner.GameLogic
         public void Update(GameTime delta)
         {
             _currentState = _currentState.Update(this, delta);
+        }
+
+        public void Exit()
+        {
+            _gameInstance.Exit();
+        }
+
+        public void Reset()
+        {
+            // retrieve actual game area size
+            int width = _gameArea.GetLength(0);
+            int height = _gameArea.GetLength(1);
+
+            // replace game area by a fresh instance
+            _gameArea = null;
+            _gameArea = new Block[width, height];
+
+            // call garbage collector to ensure previous game blocks to be freed
+            GC.Collect();
         }
     }
 }

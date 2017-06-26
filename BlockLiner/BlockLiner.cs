@@ -39,7 +39,7 @@ namespace BlockLiner
         protected override void Initialize()
         {
             // gamelogic initialization
-            _gamelogic = new BlockLinerLogic(BoardWidth, BoardHeight);
+            _gamelogic = new BlockLinerLogic(BoardWidth, BoardHeight, this);
             //_gamelogic = new TestingBlockLiner((int)BoardWidth, (int)BoardHeight);
 
             // graphics initialization

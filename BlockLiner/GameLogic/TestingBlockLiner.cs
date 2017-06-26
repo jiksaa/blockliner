@@ -72,5 +72,15 @@ namespace BlockLiner.GameLogic
         {
             throw new NotImplementedException();
         }
+
+        public void Exit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

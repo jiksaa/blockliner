@@ -16,6 +16,8 @@ namespace BlockLiner.GameLogic
         BlockLinerState.Type CurrentState { get; }
 
         void Update(GameTime delta);
+        void Exit();
+        void Reset();
         BlockLinerState GetStateInstance(BlockLinerState.Type stateType);
         TetraBlock PopNextTetraBlock();
     }
