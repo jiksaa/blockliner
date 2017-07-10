@@ -5,14 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using BlockLiner.GameLogic.Blocks;
+using Microsoft.Xna.Framework.Input;
 
 namespace BlockLiner.GameLogic.States
 {
     class FallingState : BlockLinerState
     {
 
+        private enum Direction
+        {
+            Left,
+            Right,
+            Down
+        }
+
+        private const double _KEYPOLLINGTIME = 0.1;
+
         private double _fallingTime;
         private double _seconds;
+        private double _inputElapsedTime;
 
         public override Type StateType
         {
@@ -25,14 +36,22 @@ namespace BlockLiner.GameLogic.States
         public FallingState(double seconds)
         {
             _fallingTime = 0;
+            _inputElapsedTime = 0;
             _seconds = seconds;
         }
 
         public override BlockLinerState Update(IBlockLiner gamestate, GameTime delta)
         {
-            // Manage rotation and moving
             _fallingTime += delta.ElapsedGameTime.TotalSeconds;
-            if(_fallingTime > _seconds)
+            _inputElapsedTime += delta.ElapsedGameTime.TotalSeconds;
+
+            // Manage rotation and moving
+            if (_inputElapsedTime > _KEYPOLLINGTIME)
+            {
+                HandleInput();
+            }
+
+            if (_fallingTime > _seconds)
             {
                 _fallingTime = 0;
                 return FallingProcess(gamestate);
@@ -40,6 +59,93 @@ namespace BlockLiner.GameLogic.States
             return this;
         }
 
+        #region InputHandling
+        private void HandleInput()
+        {
+            KeyboardState kbs = Keyboard.GetState();
+            if(kbs.IsKeyDown(Keys.Left))
+            {
+
+            }
+        }
+        #endregion
+
+        #region Common
+
+        private static bool IsAbleToMove(Block b, Direction direction, Block[,] gameArea)
+        {
+            int maxX = gameArea.GetLength(0);
+            int maxY = gameArea.GetLength(1);
+
+            int xToCheck = (int)b.X;
+            int yToCheck = (int)b.Y;
+
+            switch(direction)
+            {
+                case Direction.Down:
+                    yToCheck++;
+                    break;
+                case Direction.Left:
+                    xToCheck--;
+                    break;
+                case Direction.Right:
+                    xToCheck++;
+                    break;
+            }
+            return xToCheck >= 0 && xToCheck < maxX && yToCheck < maxY && gameArea[xToCheck, yToCheck] == null;
+        }
+
+        private static void MoveBlock(Block b, Direction direction, Block[,] gameArea)
+        {
+            //compute new Location
+            int xNewPos = (int)b.X;
+            int yNewPos = (int)b.Y;
+
+            switch(direction)
+            {
+                case Direction.Down:
+                    yNewPos++;
+                    break;
+                case Direction.Left:
+                    xNewPos--;
+                    break;
+                case Direction.Right:
+                    xNewPos++;
+                    break;
+            }
+
+            // move block
+            gameArea[xNewPos, yNewPos] = b;
+            gameArea[(int)b.X, (int)b.Y] = null;
+
+            // update block location
+            b.X = xNewPos;
+            b.Y = yNewPos;
+        }
+
+        private static void RevertMove(List<Block> movedBlocks, Direction direction, Block[,] gameArea)
+        {
+            foreach (Block b in movedBlocks)
+            {
+                gameArea[(int)b.X, (int)b.Y] = null;
+                switch(direction)
+                {
+                    case Direction.Down: b.Y--; break;
+                    case Direction.Left: b.X++; break;
+                    case Direction.Right: b.X--; break;
+                }
+                b.Falling = false;
+            }
+            foreach (Block b in movedBlocks)
+            {
+                gameArea[(int)b.X, (int)b.Y] = b;
+            }
+        }
+
+        #endregion
+
+
+        #region FallingProcess
         private BlockLinerState FallingProcess(IBlockLiner gamestate)
         {
             List<Block> fellBlocks = new List<Block>();
@@ -108,10 +214,11 @@ namespace BlockLiner.GameLogic.States
                 b.Y -= 1;
                 b.Falling = false;
             }
-            foreach(Block b in fellBlocks)
+            foreach (Block b in fellBlocks)
             {
                 gameArea[(int)b.X, (int)b.Y] = b;
             }
-        }
+        } 
+        #endregion
     }
 }
