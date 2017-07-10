@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
-using BlockLiner.GameLogic.Blocks;
 using Microsoft.Xna.Framework.Input;
+
+using BlockLiner.GameLogic.Blocks;
+using BlockLiner.GameLogic.Exceptions;
 
 namespace BlockLiner.GameLogic.States
 {
@@ -19,7 +18,7 @@ namespace BlockLiner.GameLogic.States
             Down
         }
 
-        private const double _KEYPOLLINGTIME = 0.1;
+        private const double _KEYPOLLINGTIME = 0.05;
 
         private double _fallingTime;
         private double _seconds;
@@ -48,7 +47,8 @@ namespace BlockLiner.GameLogic.States
             // Manage rotation and moving
             if (_inputElapsedTime > _KEYPOLLINGTIME)
             {
-                HandleInput();
+                _inputElapsedTime = 0;
+                HandleInput(gamestate);
             }
 
             if (_fallingTime > _seconds)
@@ -60,42 +60,99 @@ namespace BlockLiner.GameLogic.States
         }
 
         #region InputHandling
-        private void HandleInput()
+        private void HandleInput(IBlockLiner gamestate)
         {
-            KeyboardState kbs = Keyboard.GetState();
-            if(kbs.IsKeyDown(Keys.Left))
+            try
             {
-
+                KeyboardState kbs = Keyboard.GetState();
+                if (kbs.IsKeyDown(Keys.Left))
+                {
+                    Move(Direction.Left, gamestate);
+                }
+                if (kbs.IsKeyDown(Keys.Right))
+                {
+                    Move(Direction.Right, gamestate);
+                }
+                if (kbs.IsKeyDown(Keys.Down))
+                {
+                    Move(Direction.Down, gamestate);
+                }
+            }
+            catch (UnplacableBlockException)
+            {
+                
             }
         }
         #endregion
 
         #region Common
 
-        private static bool IsAbleToMove(Block b, Direction direction, Block[,] gameArea)
+        private static void Move(Direction direction, IBlockLiner gamestate)
         {
-            int maxX = gameArea.GetLength(0);
-            int maxY = gameArea.GetLength(1);
+            List<Block> movableBlock = new List<Block>();
 
-            int xToCheck = (int)b.X;
-            int yToCheck = (int)b.Y;
+            // get gameArea dimension
+            int xLength = gamestate.GameArea.GetLength(0);
+            int yLength = gamestate.GameArea.GetLength(1);
 
-            switch(direction)
+            bool revert = false;
+
+            // iterate through gameArea for falling blocks that going
+            // to be affected by movement
+            for (int y = 0; y < yLength; y++)
             {
-                case Direction.Down:
-                    yToCheck++;
-                    break;
-                case Direction.Left:
-                    xToCheck--;
-                    break;
-                case Direction.Right:
-                    xToCheck++;
-                    break;
+                for (int x = 0; x < xLength; x++)
+                {
+                    Block b = gamestate.GameArea[x, y];
+                    if (b != null && b.Falling)
+                    {
+                        gamestate.GameArea[x, y] = null;
+                        MoveBlock(b, direction);
+                        movableBlock.Add(b);
+                    }
+                }
             }
-            return xToCheck >= 0 && xToCheck < maxX && yToCheck < maxY && gameArea[xToCheck, yToCheck] == null;
+
+            if (movableBlock.Count == 0)
+                throw new UnplacableBlockException();
+
+            // if any error during iteration, revert block position
+            if (AreAbleToMove(movableBlock, direction, gamestate.GameArea))
+            {
+                foreach (Block b in movableBlock)
+                {
+                    gamestate.GameArea[(int)b.X, (int)b.Y] = b;
+                }
+            }
+            else
+            {
+                RevertMove(movableBlock, direction, gamestate.GameArea);
+                throw new UnplacableBlockException();
+            }
         }
 
-        private static void MoveBlock(Block b, Direction direction, Block[,] gameArea)
+        private static bool AreAbleToMove(List<Block> movedBlocks, Direction direction, Block[,] gameArea)
+        {
+            bool validMove = true;
+
+            foreach (Block b in movedBlocks)
+            {
+                int maxX = gameArea.GetLength(0);
+                int maxY = gameArea.GetLength(1);
+
+                int xToCheck = (int)b.X;
+                int yToCheck = (int)b.Y;
+
+                if(!(xToCheck >= 0 && xToCheck < maxX && yToCheck < maxY && gameArea[xToCheck, yToCheck] == null))
+                {
+                    validMove = false;
+                    break;
+                }
+            }
+            return validMove;
+        }
+
+        private static void MoveBlock(Block b, Direction direction)
         {
             //compute new Location
             int xNewPos = (int)b.X;
@@ -113,11 +170,6 @@ namespace BlockLiner.GameLogic.States
                     xNewPos++;
                     break;
             }
-
-            // move block
-            gameArea[xNewPos, yNewPos] = b;
-            gameArea[(int)b.X, (int)b.Y] = null;
-
             // update block location
             b.X = xNewPos;
             b.Y = yNewPos;
@@ -127,17 +179,17 @@ namespace BlockLiner.GameLogic.States
         {
             foreach (Block b in movedBlocks)
             {
-                gameArea[(int)b.X, (int)b.Y] = null;
+
+                // revert Block position
                 switch(direction)
                 {
-                    case Direction.Down: b.Y--; break;
+                    case Direction.Down:
+                        b.Y--;
+                        b.Falling = false;
+                        break;
                     case Direction.Left: b.X++; break;
                     case Direction.Right: b.X--; break;
                 }
-                b.Falling = false;
-            }
-            foreach (Block b in movedBlocks)
-            {
                 gameArea[(int)b.X, (int)b.Y] = b;
             }
         }
@@ -148,37 +200,12 @@ namespace BlockLiner.GameLogic.States
         #region FallingProcess
         private BlockLinerState FallingProcess(IBlockLiner gamestate)
         {
-            List<Block> fellBlocks = new List<Block>();
-
-            int xLength = gamestate.GameArea.GetLength(0);
-            int yLength = gamestate.GameArea.GetLength(1);
-
-            bool revert = false;
-
-            for (int y = yLength - 1; y >= 0; y--)
+            try
             {
-                for (int x = 0; x < xLength; x++)
-                {
-                    Block b = gamestate.GameArea[x, y];
-                    if (b != null && b.Falling)
-                    {
-                        if (CanFall(gamestate.GameArea, b))
-                        {
-                            FallBlock(gamestate.GameArea, b);
-                            fellBlocks.Add(b);
-                        }
-                        else
-                        {
-                            b.Falling = false;
-                            revert = true;
-                        }
-                    }
-                }
+                Move(Direction.Down, gamestate);
             }
-
-            if (revert)
+            catch (UnplacableBlockException)
             {
-                RevertFalling(gamestate.GameArea, fellBlocks);
                 return gamestate.GetStateInstance(Type.Checking);
             }
             return this;
