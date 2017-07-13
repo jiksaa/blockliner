@@ -18,19 +18,20 @@ namespace BlockLiner.GameLogic
         private static BlockLinerState _gameoverState = new GameOverState();
 
         private Block[,] _gameArea;
-        private List<TetraBlock> _tetraList;
+        private TetraBlock[] _tetraArray;
         private BlockLinerState _currentState;
         private Game _gameInstance;
 
-        private int _tetraListIndex;
+        private Random _randomGenerator;
 
         public BlockLinerLogic(uint width, uint height, Game gameInstance)
         {
+            _randomGenerator = new Random();
             _gameInstance = gameInstance;
             _gameArea = new Block[width, height];
 
             // instantiate tetrablock pattern
-            _tetraList = new List<TetraBlock>()
+            _tetraArray = new TetraBlock[]
             {
                 new TetraBlockO(),
                 new TetraBlockL(),
@@ -41,7 +42,7 @@ namespace BlockLiner.GameLogic
                 new TetraBlockZ()
             };
 
-            _tetraListIndex = 0;
+            ShuffleTetraBlock();
 
             // set initialization state
             _currentState = _initState;
@@ -73,17 +74,29 @@ namespace BlockLiner.GameLogic
         {
             get
             {
-                return _tetraList[_tetraListIndex];
+                return _tetraArray[0];
             }
         }
 
         public TetraBlock PopNextTetraBlock()
         {
-            TetraBlock next = _tetraList[_tetraListIndex];
-            _tetraListIndex++;
-            _tetraListIndex %= _tetraList.Count;
-            // TODO: shuffle list after one round
+            TetraBlock next = _tetraArray[0];
+            ShuffleTetraBlock();
             return next;
+        }
+
+        private void ShuffleTetraBlock()
+        {
+            
+            int arraySize = _tetraArray.Length;
+            // foreach tetrablock of the list generate random swaping
+            while(arraySize > 1)
+            {
+                int newPos = _randomGenerator.Next(arraySize--);
+                TetraBlock tb = _tetraArray[i];
+                _tetraArray[i] = _tetraArray[newPos];
+                _tetraArray[newPos] = tb;
+            }
         }
 
         public BlockLinerState GetStateInstance(BlockLinerState.Type stateType)
