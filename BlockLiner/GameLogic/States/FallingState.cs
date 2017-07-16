@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 using BlockLiner.GameLogic.Blocks;
 using BlockLiner.GameLogic.Exceptions;
+using System;
 
 namespace BlockLiner.GameLogic.States
 {
@@ -77,15 +78,75 @@ namespace BlockLiner.GameLogic.States
                 {
                     Move(Direction.Down, gamestate);
                 }
+                if (kbs.IsKeyDown(Keys.Up))
+                {
+                    Rotate(gamestate);
+                }
             }
             catch (UnplacableBlockException)
             {
                 
             }
         }
+
+        private static void Rotate(IBlockLiner gamestate)
+        {
+            // retrieve fallingBlocks
+            List<Block> fallingBlocks = GetFallingBlocks(gamestate);
+
+
+            // extract (x.y) min and max position
+            int minX = int.MaxValue;
+            int minY = int.MaxValue;
+            int maxX = int.MinValue;
+            int maxY = int.MinValue;
+            foreach(Block b in fallingBlocks)
+            {
+                minX = (b.X < minX) ? (int)b.X : minX;
+                minY = (b.Y < minY) ? (int)b.Y : minY;
+                maxX = (b.X > maxX) ? (int)b.X : maxX;
+                maxY = (b.Y > maxY) ? (int)b.Y : maxY;
+            }
+
+            // create rotation pattern
+
+            // should be refactored !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            Block[,] rotationMatrix = new Block[4,4];
+
+            // declaring (x,y) mapping function
+            Func<int, int> XMapping = (int realx) => { return realx - minX; };
+            Func<int, int> YMapping = (int realy) => { return realy - minY; };
+
+            // foreach falling blocks put block inside the pattern
+            // according to mapping functions
+            foreach (Block b in fallingBlocks)
+            {
+                int xPatternPos = XMapping((int)b.X);
+                int yPatternPos = YMapping((int)b.Y);
+
+                rotationMatrix[xPatternPos, yPatternPos] = b;
+            }
+        }
+
         #endregion
 
         #region Common
+
+        private static List<Block> GetFallingBlocks(IBlockLiner gamestate)
+        {
+            List<Block> fallingBlocks = new List<Block>();
+
+            int xLength = gamestate.GameArea.GetLength(0);
+            int yLength = gamestate.GameArea.GetLength(1);
+
+            foreach(Block b in gamestate.GameArea)
+            {
+                if (b != null && b.Falling)
+                    fallingBlocks.Add(b);
+            }
+
+            return fallingBlocks;
+        }
 
         private static void Move(Direction direction, IBlockLiner gamestate)
         {
@@ -94,8 +155,6 @@ namespace BlockLiner.GameLogic.States
             // get gameArea dimension
             int xLength = gamestate.GameArea.GetLength(0);
             int yLength = gamestate.GameArea.GetLength(1);
-
-            bool revert = false;
 
             // iterate through gameArea for falling blocks that going
             // to be affected by movement
@@ -195,7 +254,6 @@ namespace BlockLiner.GameLogic.States
         }
 
         #endregion
-
 
         #region FallingProcess
         private BlockLinerState FallingProcess(IBlockLiner gamestate)

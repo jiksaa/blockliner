@@ -93,8 +93,8 @@ namespace BlockLiner.GameLogic
             while(arraySize > 1)
             {
                 int newPos = _randomGenerator.Next(arraySize--);
-                TetraBlock tb = _tetraArray[i];
-                _tetraArray[i] = _tetraArray[newPos];
+                TetraBlock tb = _tetraArray[arraySize];
+                _tetraArray[arraySize] = _tetraArray[newPos];
                 _tetraArray[newPos] = tb;
             }
         }
